@@ -1,3 +1,10 @@
+from ansible.module_utils.six import string_types
+def list_dict_str(value):
+    if isinstance(value, (list, dict, string_types)):
+        return value
+    raise TypeError
+
+
 AUTH_ARG_SPEC = {
     'kubeconfig': {
         'type': 'path',
@@ -66,4 +73,24 @@ AUTH_ARG_MAP = {
     'persist_config': 'persist_config',
 }
 
+COMMON_ARG_SPEC = {
+    'state': {
+        'default': 'present',
+        'choices': ['present', 'absent'],
+    },
+    'force': {
+        'type': 'bool',
+        'default': False,
+    },
+}
+
+RESOURCE_ARG_SPEC = {
+    'resource_definition': {
+        'type': list_dict_str,
+        'aliases': ['definition', 'inline']
+    },
+    'src': {
+        'type': 'path',
+    },
+}
 

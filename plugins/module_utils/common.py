@@ -26,10 +26,10 @@ from functools import lru_cache
 from datetime import datetime
 from distutils.version import LooseVersion
 
+from ansible.module_utils.six import iteritems, string_types
 from ansible_collections.community.kubernetes.plugins.module_utils.args_common import (AUTH_ARG_MAP, AUTH_ARG_SPEC, WAIT_ARG_SPEC)
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible.module_utils.six import iteritems, string_types
 from ansible.module_utils._text import to_native
 from ansible.module_utils.common.dict_transformations import dict_merge
 
@@ -98,34 +98,8 @@ except ImportError as e:
     K8S_IMP_ERR = traceback.format_exc()
 
 
-def list_dict_str(value):
-    if isinstance(value, (list, dict, string_types)):
-        return value
-    raise TypeError
-
-
 ARG_ATTRIBUTES_BLACKLIST = ('property_path',)
 
-COMMON_ARG_SPEC = {
-    'state': {
-        'default': 'present',
-        'choices': ['present', 'absent'],
-    },
-    'force': {
-        'type': 'bool',
-        'default': False,
-    },
-}
-
-RESOURCE_ARG_SPEC = {
-    'resource_definition': {
-        'type': list_dict_str,
-        'aliases': ['definition', 'inline']
-    },
-    'src': {
-        'type': 'path',
-    },
-}
 
 NAME_ARG_SPEC = {
     'kind': {},
